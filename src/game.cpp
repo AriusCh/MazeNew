@@ -1,9 +1,15 @@
 #include "game.h"
 
-game::game() {
+#include "dungeon.h"
+#include "screen.h"
+
+using std::make_shared;
+
+game::game() : Dungeon(make_shared<dungeon>()){
 
 }
 
-void game::start() {
-
+void game::start(){
+    screen::clear();
+    Dungeon->print();
 }
