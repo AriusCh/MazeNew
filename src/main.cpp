@@ -1,6 +1,16 @@
 #include <iostream>
+#include "game.h"
+#include "screen.h"
+#include "dungeon.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    game Game{};
+    Game.start();
+
+    dungeon Dungeon = {};
+
+    screen::clear();
+    screen::print(Dungeon);
+
     return 0;
 }
