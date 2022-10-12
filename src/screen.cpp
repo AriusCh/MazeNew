@@ -14,6 +14,8 @@ void screen::delay(int milSec) {
 }
 
 void screen::print(const dungeon& Dungeon) {
+    screen::clear();
+
     auto level = Dungeon.getLevel();
     for (auto row : level) {
         for (auto col : row) {
