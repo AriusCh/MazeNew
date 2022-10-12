@@ -11,9 +11,12 @@ public:
     ~dungeon();
 
     [[nodiscard]] const std::vector<std::vector<std::shared_ptr<cell>>>& getLevel() const;
+    void print();
 
 private:
     int height = 25;
     int width = 100;
     std::vector<std::vector<std::shared_ptr<cell>>> level;
+
+    void generateEmptyLevel();
 };
