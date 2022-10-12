@@ -1,9 +1,9 @@
 #include "ground.h"
 
-using enum cellType;
+//using enum cellType;
 
 ground::ground() {
-    type = Ground;
+    type = cellType::Ground;
 //    stringForm = "\u2591";
     stringForm = " ";
 }

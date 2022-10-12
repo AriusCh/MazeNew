@@ -2,10 +2,10 @@
 
 #include <string>
 
-using enum cellType;
+//using enum cellType;
 
 wall::wall(){
-    type = Wall;
+    type = cellType::Wall;
 //    stringForm = "\u2593";
     stringForm = "#";
 }
