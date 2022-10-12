@@ -7,10 +7,5 @@ int main() {
     game Game{};
     Game.start();
 
-    dungeon Dungeon = {};
-
-    screen::clear();
-    screen::print(Dungeon);
-
     return 0;
 }
