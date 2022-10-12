@@ -6,8 +6,7 @@ using enum cellType;
 
 wall::wall(){
     type = Wall;
-//    stringForm = "\u2593";
-    stringForm = "#";
+    stringForm = "\u2593";
 }
 
 wall::~wall() = default;

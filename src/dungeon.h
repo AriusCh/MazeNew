@@ -16,6 +16,4 @@ private:
     int height = 25;
     int width = 100;
     std::vector<std::vector<std::shared_ptr<cell>>> level;
-
-    void generateEmptyLevel();
 };
