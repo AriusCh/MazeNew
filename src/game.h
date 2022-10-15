@@ -10,6 +10,8 @@ public:
 
     void start();
 private:
+    void processGameplayInput();
+    void movePlayer(int key);
 
     std::shared_ptr<dungeon> Dungeon;
 };

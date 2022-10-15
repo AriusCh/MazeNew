@@ -1,11 +1,15 @@
 #include <iostream>
 #include "game.h"
-#include "screen.h"
-#include "dungeon.h"
+#include "terminal.h"
 
 int main() {
+
+    terminal::initialize();
+
     game Game{};
     Game.start();
+
+    terminal::restore();
 
     return 0;
 }
