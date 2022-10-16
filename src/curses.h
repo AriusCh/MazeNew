@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef _WIN32
-    #include <ncurses/ncurses.h>
+    #include <PDCurses/curses.h>
 #else
     #include <ncurses.h>
 #endif

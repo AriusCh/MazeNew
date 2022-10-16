@@ -5,8 +5,6 @@
 #include "player.h"
 #include "cell.h"
 
-#include <ncurses.h> // TEMPORARY, DELETE LATER
-
 game::game() {
 
 }
