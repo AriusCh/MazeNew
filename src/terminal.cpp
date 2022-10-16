@@ -26,6 +26,7 @@ void terminal::delay(int milSec) {
 }
 
 void terminal::print(const dungeon& Dungeon) {
+    resize_term(0, 0);
     auto level = Dungeon.getLevel();
     for (const auto& row : level) {
         for (const auto& col : row) {

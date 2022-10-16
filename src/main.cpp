@@ -1,4 +1,3 @@
-#include <iostream>
 #include "game.h"
 #include "terminal.h"
 
