@@ -29,14 +29,11 @@ char cell::getCharForm() {
 
 void cell::setCharacter(shared_ptr<character> Char) {
     this->Character = Char;
+    Character->setCell(shared_from_this());
 }
 
 std::shared_ptr<character> cell::getCharacter() const {
     return Character;
-}
-
-void cell::resetCharacter() {
-    Character.reset();
 }
 
 Coords_t cell::getCoords() const {
@@ -45,4 +42,8 @@ Coords_t cell::getCoords() const {
 
 bool cell::isWalkable() const {
     return Terrain->getIsWalkable();
+}
+
+std::shared_ptr<character> &&cell::MoveCharacter() {
+    return std::move(Character);
 }

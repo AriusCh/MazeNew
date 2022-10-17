@@ -12,12 +12,10 @@ game::game() {
 bool endSession = false;
 
 void game::start() {
-    terminal::clearScreen();
     Dungeon = std::make_shared<dungeon>();
-
     while (!endSession) {
         terminal::clearScreen();
-        Dungeon->print();
+        terminal::print(Dungeon);
         processGameplayInput();
     }
 }

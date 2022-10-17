@@ -16,5 +16,5 @@ public:
 protected:
     std::string name;
     char charForm;
-    std::shared_ptr<cell> Cell;
+    std::weak_ptr<cell> Cell;
 };

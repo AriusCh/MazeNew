@@ -15,7 +15,8 @@ char character::getCharForm() const{
 }
 
 std::shared_ptr<cell> character::getCell() const {
-    return Cell;
+    return Cell.lock();
+
 }
 
 void character::setCell(shared_ptr<cell> Cell) {

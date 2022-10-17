@@ -15,10 +15,11 @@ public:
     ~dungeon();
 
     [[nodiscard]] const std::vector<std::vector<std::shared_ptr<cell>>>& getLevel() const;
-    void print() const;
     std::shared_ptr<cell> getCellAt(Coords_t coords) const;
     void tryToMoveCharacter(Coords_t from, Coords_t to);
     bool checkMove(std::shared_ptr<cell> fromCell,std::shared_ptr<cell> toCell);
+    int getHeight() const;
+    int getWidth() const;
 
 private:
     int height = 50;

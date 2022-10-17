@@ -2,7 +2,6 @@
 
 #include "cell.h"
 #include "terrain.h"
-#include "terminal.h"
 #include "character.h"
 #include "player.h"
 
@@ -20,10 +19,6 @@ dungeon::dungeon() : level(height, vector<shared_ptr<cell>>(width)) {
 
 const vector<vector<shared_ptr<cell>>> &dungeon::getLevel() const {
     return level;
-}
-
-void dungeon::print() const {
-    terminal::print(*this);
 }
 
 void dungeon::generateEmptyLevel() {
@@ -63,10 +58,8 @@ void dungeon::tryToMoveCharacter(Coords_t from, Coords_t to) {
     if (!checkMove(fromCell, toCell))
         return;
 
-    auto Char = fromCell->getCharacter();
+    auto Char = fromCell->MoveCharacter();
     toCell->setCharacter(Char);
-    Char->setCell(toCell);
-    fromCell->resetCharacter();
 }
 
 bool dungeon::checkMove(std::shared_ptr<cell> fromCell, std::shared_ptr<cell> toCell) {
@@ -77,6 +70,14 @@ bool dungeon::checkMove(std::shared_ptr<cell> fromCell, std::shared_ptr<cell> to
         return false;
 
     return true;
+}
+
+int dungeon::getHeight() const {
+    return height;
+}
+
+int dungeon::getWidth() const {
+    return width;
 }
 
 dungeon::~dungeon() = default;
