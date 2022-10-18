@@ -1,4 +1,5 @@
 #include "player.h"
+#include "item.h"
 
 using std::make_shared;
 using std::shared_ptr;

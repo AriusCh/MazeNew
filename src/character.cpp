@@ -2,15 +2,22 @@
 
 #include <utility>
 
+#include "item.h"
+
 using std::string;
 using std::pair;
 using std::shared_ptr;
+using std::unique_ptr;
+using std::vector;
+
+using
+enum itemType;
 
 character::character(string name, std::shared_ptr<cell> Cell) : name(std::move(name)), Cell(std::move(Cell)) {
 
 }
 
-char character::getCharForm() const{
+char character::getCharForm() const {
     return charForm;
 }
 
@@ -21,4 +28,8 @@ std::shared_ptr<cell> character::getCell() const {
 
 void character::setCell(shared_ptr<cell> Cell) {
     this->Cell = Cell;
+}
+
+vector<unique_ptr<item>>& character::getInventory() {
+    return Inventory;
 }
