@@ -13,7 +13,10 @@ set(
         src/cell.cpp src/cell.h
         src/player.cpp src/player.h
         src/character.cpp src/character.h
-        src/curses.h src/terrain.cpp src/terrain.h src/object.cpp src/object.h)
+        src/curses.h
+        src/terrain.cpp src/terrain.h
+        src/object.cpp src/object.h
+        src/item.cpp src/item.h)
 
 set(build_dir "MazeNew")
 
