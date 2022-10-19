@@ -2,8 +2,6 @@
 
 #include <string>
 
-using std::string;
-
 enum class itemType {
     Weapon,
     Armor
@@ -11,12 +9,12 @@ enum class itemType {
 
 class item {
 public:
-    item(itemType type, string name);
+    item(itemType type, std::string name);
     ~item();
 
-    string getName() const;
+    std::string getName() const;
 
 private:
     itemType type;
-    string name;
+    std::string name;
 };
