@@ -13,7 +13,7 @@ using std::vector;
 using
 enum itemType;
 
-character::character(string name, std::shared_ptr<cell> Cell) : name(std::move(name)), Cell(std::move(Cell)) {
+character::character(string name, char charForm, std::shared_ptr<cell> Cell) : name(std::move(name)), charForm(charForm), Cell(std::move(Cell)) {
 
 }
 
@@ -32,4 +32,20 @@ void character::setCell(shared_ptr<cell> Cell) {
 
 vector<unique_ptr<item>>& character::getInventory() {
     return Inventory;
+}
+
+int character::getHealthPoints() const {
+    return healthPoints;
+}
+
+void character::setHealthPoints(int newHealthPoints) {
+    this->healthPoints = newHealthPoints;
+}
+
+int character::calculateDamage() const{
+    return baseDamage;
+}
+
+void character::damageHealthPoints(int damage) {
+    healthPoints -= damage;
 }

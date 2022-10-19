@@ -47,28 +47,28 @@ void game::movePlayer(int key) {
     auto coords = PlayerCell->getCoords();
     switch (key) {
         case '1':
-            Dungeon->tryToMoveCharacter(coords, {coords.y + 1, coords.x - 1});
+            Dungeon->tryToMove(coords, {coords.y + 1, coords.x - 1});
             break;
         case '2':
-            Dungeon->tryToMoveCharacter(coords, {coords.y + 1, coords.x});
+            Dungeon->tryToMove(coords, {coords.y + 1, coords.x});
             break;
         case '3':
-            Dungeon->tryToMoveCharacter(coords, {coords.y + 1, coords.x + 1});
+            Dungeon->tryToMove(coords, {coords.y + 1, coords.x + 1});
             break;
         case '4':
-            Dungeon->tryToMoveCharacter(coords, {coords.y, coords.x - 1});
+            Dungeon->tryToMove(coords, {coords.y, coords.x - 1});
             break;
         case '6':
-            Dungeon->tryToMoveCharacter(coords, {coords.y, coords.x + 1});
+            Dungeon->tryToMove(coords, {coords.y, coords.x + 1});
             break;
         case '7':
-            Dungeon->tryToMoveCharacter(coords, {coords.y - 1, coords.x - 1});
+            Dungeon->tryToMove(coords, {coords.y - 1, coords.x - 1});
             break;
         case '8':
-            Dungeon->tryToMoveCharacter(coords, {coords.y - 1, coords.x});
+            Dungeon->tryToMove(coords, {coords.y - 1, coords.x});
             break;
         case '9':
-            Dungeon->tryToMoveCharacter(coords, {coords.y - 1, coords.x + 1});
+            Dungeon->tryToMove(coords, {coords.y - 1, coords.x + 1});
             break;
     }
 }
