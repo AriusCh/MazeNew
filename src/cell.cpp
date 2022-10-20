@@ -5,6 +5,7 @@
 #include "terrain.h"
 #include "character.h"
 #include "object.h"
+#include "dungeon.h"
 
 using std::unique_ptr;
 using std::make_unique;
@@ -28,7 +29,11 @@ char cell::getCharForm() {
 }
 
 void cell::setCharacter(shared_ptr<character> Char) {
-    this->Character = Char;
+    if (Character)
+        this->Character->setCell(nullptr);
+    this->Character = std::move(Char);
+    if (!Character)
+        return;
     Character->setCell(shared_from_this());
 }
 

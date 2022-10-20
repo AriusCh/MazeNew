@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <list>
 #include <memory>
 
 class cell;
@@ -16,8 +15,9 @@ public:
 
     [[nodiscard]] const std::vector<std::vector<std::shared_ptr<cell>>>& getLevel() const;
     std::shared_ptr<cell> getCellAt(Coords_t coords) const;
-    void tryToMoveCharacter(Coords_t from, Coords_t to);
+    void tryToMove(Coords_t from, Coords_t to);
     bool checkMove(std::shared_ptr<cell> fromCell,std::shared_ptr<cell> toCell);
+    void tryToAttackMelee(std::shared_ptr<character> attacker, Coords_t direction);
     int getHeight() const;
     int getWidth() const;
 
@@ -25,8 +25,8 @@ private:
     int height = 50;
     int width = 150;
     std::vector<std::vector<std::shared_ptr<cell>>> level;
-    std::list<std::shared_ptr<character>> characters;
+    std::vector<std::weak_ptr<character>> characters;
+    void addCharacter(std::shared_ptr<character> Char);
 
     void generateEmptyLevel();
-    std::shared_ptr<character> generateCharacter(std::shared_ptr<character> Char);
 };
