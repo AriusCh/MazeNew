@@ -26,7 +26,7 @@ private:
     int width = 150;
     std::vector<std::vector<std::shared_ptr<cell>>> level;
     std::vector<std::weak_ptr<character>> characters;
+    void addCharacter(std::shared_ptr<character> Char);
 
     void generateEmptyLevel();
-    std::shared_ptr<character> generateCharacter(std::shared_ptr<character> Char);
 };

@@ -8,6 +8,8 @@ class object;
 
 class character;
 
+class dungeon;
+
 enum class terrainType;
 
 struct Coords_t {

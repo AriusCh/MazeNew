@@ -13,7 +13,7 @@ using std::vector;
 using
 enum itemType;
 
-character::character(string name, char charForm, std::shared_ptr<cell> Cell) : name(std::move(name)), charForm(charForm), Cell(std::move(Cell)) {
+character::character(string name, char charForm) : name(std::move(name)), charForm(charForm) {
 
 }
 

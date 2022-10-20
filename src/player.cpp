@@ -6,7 +6,7 @@ using std::shared_ptr;
 
 shared_ptr<player> player::Player = nullptr;
 
-player::player() : character("Unnamed", '@', nullptr) {
+player::player() : character("Unnamed", '@') {
 }
 
 shared_ptr<player> player::getPlayer() {

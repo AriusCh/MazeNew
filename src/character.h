@@ -9,7 +9,7 @@ class item;
 
 class character {
 public:
-    character(std::string name, char charForm, std::shared_ptr<cell> Cell);
+    character(std::string name, char charForm);
 
     char getCharForm() const;
     [[nodiscard]] std::shared_ptr<cell> getCell() const;

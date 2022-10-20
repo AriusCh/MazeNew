@@ -4,14 +4,14 @@
 #include "terrain.h"
 #include "character.h"
 #include "player.h"
+#include "item.h"
 
 using std::vector;
 using std::shared_ptr;
 using std::make_shared;
 using std::make_unique;
 
-using
-enum terrainType;
+using enum terrainType;
 
 dungeon::dungeon() : level(height, vector<shared_ptr<cell>>(width)) {
     generateEmptyLevel();
@@ -35,13 +35,16 @@ void dungeon::generateEmptyLevel() {
             }
         }
     }
-    level[height / 2][width / 2]->setCharacter(generateCharacter(player::getPlayer()));
-    player::getPlayer()->setCell(level[height / 2][width / 2]);
+    level[height / 2][width / 2]->setCharacter(player::getPlayer());
+    addCharacter(player::getPlayer());
+
+    auto frog = make_shared<character>("Frog", 'f');
+    level[1][1]->setCharacter(frog);
+    addCharacter(frog);
 }
 
-shared_ptr<character> dungeon::generateCharacter(shared_ptr<character> Char) {
+void dungeon::addCharacter(shared_ptr<character> Char) {
     characters.push_back(Char);
-    return std::move(Char);
 }
 
 std::shared_ptr<cell> dungeon::getCellAt(Coords_t coords) const {
@@ -85,6 +88,9 @@ int dungeon::getWidth() const {
 
 void dungeon::tryToAttackMelee(std::shared_ptr<character> attacker, Coords_t direction) {
     auto defender = level[direction.y][direction.x]->getCharacter();
+
+    if (!defender)
+        return;
 
     int damage = attacker->calculateDamage();
     defender->damageHealthPoints(damage);
