@@ -2,11 +2,11 @@
 
 #include <memory>
 
-class dungeon;
+class Dungeon;
 
-class game {
+class Game {
 public:
-    game();
+    Game();
 
     void start();
 private:
@@ -15,5 +15,5 @@ private:
     void openInventory();
     void attackMelee();
 
-    std::shared_ptr<dungeon> Dungeon;
+    std::shared_ptr<Dungeon> dungeon;
 };

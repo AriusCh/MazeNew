@@ -6,22 +6,22 @@
 #include "cell.h"
 #include "curses.h"
 
-game::game() {
+Game::Game() {
 
 }
 
 bool endSession = false;
 
-void game::start() {
-    Dungeon = std::make_shared<dungeon>();
+void Game::start() {
+    dungeon = std::make_shared<Dungeon>();
     while (!endSession) {
         terminal::clearScreen();
-        terminal::print(Dungeon);
+        terminal::print(dungeon);
         processGameplayInput();
     }
 }
 
-void game::processGameplayInput() {
+void Game::processGameplayInput() {
     auto key = terminal::getKey();
     switch (key) {
         case '1':
@@ -46,75 +46,75 @@ void game::processGameplayInput() {
     }
 }
 
-void game::movePlayer(int key) {
-    auto Player = player::getPlayer();
-    auto PlayerCell = Player->getCell();
-    if (!PlayerCell)
+void Game::movePlayer(int key) {
+    auto player = Player::getPlayer();
+    auto playerCell = player->getCell();
+    if (!playerCell)
         return;
-    auto coords = PlayerCell->getCoords();
+    auto coords = playerCell->getCoords();
     switch (key) {
         case '1':
-            Dungeon->tryToMove(coords, {coords.y + 1, coords.x - 1});
+            dungeon->tryToMove(coords, {coords.y + 1, coords.x - 1});
             break;
         case '2':
-            Dungeon->tryToMove(coords, {coords.y + 1, coords.x});
+            dungeon->tryToMove(coords, {coords.y + 1, coords.x});
             break;
         case '3':
-            Dungeon->tryToMove(coords, {coords.y + 1, coords.x + 1});
+            dungeon->tryToMove(coords, {coords.y + 1, coords.x + 1});
             break;
         case '4':
-            Dungeon->tryToMove(coords, {coords.y, coords.x - 1});
+            dungeon->tryToMove(coords, {coords.y, coords.x - 1});
             break;
         case '6':
-            Dungeon->tryToMove(coords, {coords.y, coords.x + 1});
+            dungeon->tryToMove(coords, {coords.y, coords.x + 1});
             break;
         case '7':
-            Dungeon->tryToMove(coords, {coords.y - 1, coords.x - 1});
+            dungeon->tryToMove(coords, {coords.y - 1, coords.x - 1});
             break;
         case '8':
-            Dungeon->tryToMove(coords, {coords.y - 1, coords.x});
+            dungeon->tryToMove(coords, {coords.y - 1, coords.x});
             break;
         case '9':
-            Dungeon->tryToMove(coords, {coords.y - 1, coords.x + 1});
+            dungeon->tryToMove(coords, {coords.y - 1, coords.x + 1});
             break;
     }
 }
 
-void game::attackMelee() {
+void Game::attackMelee() {
     auto direction = terminal::getKey();
-    auto Player = player::getPlayer();
-    auto PlayerCell = Player->getCell();
-    if (!PlayerCell)
+    auto player = Player::getPlayer();
+    auto playerCell = player->getCell();
+    if (!playerCell)
         return;
-    auto coords = PlayerCell->getCoords();
+    auto coords = playerCell->getCoords();
     switch (direction) {
         case '1':
-            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y + 1, coords.x - 1});
+            dungeon->tryToAttackMelee(Player::getPlayer(), {coords.y + 1, coords.x - 1});
             break;
         case '2':
-            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y + 1, coords.x});
+            dungeon->tryToAttackMelee(Player::getPlayer(), {coords.y + 1, coords.x});
             break;
         case '3':
-            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y + 1, coords.x + 1});
+            dungeon->tryToAttackMelee(Player::getPlayer(), {coords.y + 1, coords.x + 1});
         case '4':
-            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y, coords.x - 1});
+            dungeon->tryToAttackMelee(Player::getPlayer(), {coords.y, coords.x - 1});
             break;
         case '6':
-            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y, coords.x + 1});
+            dungeon->tryToAttackMelee(Player::getPlayer(), {coords.y, coords.x + 1});
             break;
         case '7':
-            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y - 1, coords.x - 1});
+            dungeon->tryToAttackMelee(Player::getPlayer(), {coords.y - 1, coords.x - 1});
             break;
         case '8':
-            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y - 1, coords.x});
+            dungeon->tryToAttackMelee(Player::getPlayer(), {coords.y - 1, coords.x});
             break;
         case '9':
-            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y - 1, coords.x + 1});
+            dungeon->tryToAttackMelee(Player::getPlayer(), {coords.y - 1, coords.x + 1});
             break;
     }
 }
 
-void game::openInventory() {
+void Game::openInventory() {
     terminal::printPlayerInventory();
     while (true) {
         auto key = terminal::getKey();

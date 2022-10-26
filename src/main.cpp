@@ -5,8 +5,8 @@ int main() {
 
     terminal::initialize();
 
-    game Game{};
-    Game.start();
+    Game game{};
+    game.start();
 
     terminal::restore();
 

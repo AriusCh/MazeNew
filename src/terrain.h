@@ -5,10 +5,10 @@ enum class terrainType {
     Wall
 };
 
-class terrain {
+class Terrain {
 public:
-    terrain(terrainType type);
-    ~terrain();
+    Terrain(terrainType type);
+    ~Terrain();
 
     char getCharForm() const;
     bool getIsWalkable() const;

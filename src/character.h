@@ -4,18 +4,18 @@
 #include <memory>
 #include <list>
 
-class cell;
-class item;
+class Cell;
+class Item;
 
-class character {
+class Character {
 public:
-    character(std::string name, char charForm);
+    Character(std::string name, char charForm);
 
     char getCharForm() const;
-    [[nodiscard]] std::shared_ptr<cell> getCell() const;
-    void setCell(std::shared_ptr<cell> Cell);
-    std::list<item>& getInventory();
-    void addItem(item Item);
+    [[nodiscard]] std::shared_ptr<Cell> getCell() const;
+    void setCell(std::shared_ptr<Cell> cell);
+    std::list<Item>& getInventory();
+    void addItem(Item item);
     int getHealthPoints() const;
     void setHealthPoints(int newHealthPoints);
     void damageHealthPoints(int damage);
@@ -25,8 +25,8 @@ public:
 protected:
     std::string name;
     char charForm;
-    std::weak_ptr<cell> Cell;
-    std::list<item> Inventory;
+    std::weak_ptr<Cell> cell;
+    std::list<Item> inventory;
 
     int baseDamage = 4;
     int healthPoints = 10;

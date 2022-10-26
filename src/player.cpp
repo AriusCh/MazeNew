@@ -4,15 +4,15 @@
 using std::make_shared;
 using std::shared_ptr;
 
-shared_ptr<player> player::Player = nullptr;
+shared_ptr<Player> Player::player = nullptr;
 
-player::player() : character("Unnamed", '@') {
+Player::Player() : Character("Unnamed", '@') {
 }
 
-shared_ptr<player> player::getPlayer() {
-    if (!Player) {
-        struct playerMakeSharedEnabler : public player {}; // To make private constructor visible for std::make_shared
-        Player = make_shared<playerMakeSharedEnabler>();
+shared_ptr<Player> Player::getPlayer() {
+    if (!player) {
+        struct playerMakeSharedEnabler : public Player {}; // To make private constructor visible for std::make_shared
+        player = make_shared<playerMakeSharedEnabler>();
     }
-    return Player;
+    return player;
 }

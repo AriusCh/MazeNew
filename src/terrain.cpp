@@ -15,20 +15,20 @@ static map<terrainType, fields> typeTable = {
         {Ground, {'.', true}}
 };
 
-terrain::terrain(terrainType type) : type(type) {
+Terrain::Terrain(terrainType type) : type(type) {
     auto tmp = typeTable[type];
     charForm = tmp.charForm;
     isWalkable = tmp.isWalkable;
 }
 
-char terrain::getCharForm() const {
+char Terrain::getCharForm() const {
     return charForm;
 }
 
-terrain::~terrain() {
+Terrain::~Terrain() {
 
 }
 
-bool terrain::getIsWalkable() const {
+bool Terrain::getIsWalkable() const {
     return isWalkable;
 }

@@ -2,13 +2,10 @@
 
 #include <memory>
 
-class terrain;
-
-class object;
-
-class character;
-
-class dungeon;
+class Terrain;
+class Object;
+class Character;
+class Dungeon;
 
 enum class terrainType;
 
@@ -17,29 +14,29 @@ struct Coords_t {
     int x;
 };
 
-class cell : public std::enable_shared_from_this<cell> {
+class Cell : public std::enable_shared_from_this<Cell> {
 public:
-    cell(std::unique_ptr<terrain> Terrain, Coords_t coords);
+    Cell(std::unique_ptr<Terrain> terrain, Coords_t coords);
 
-    cell(terrainType TerrainType, Coords_t coords);
+    Cell(terrainType TerrainType, Coords_t coords);
 
-    ~cell();
+    ~Cell();
 
     char getCharForm();
 
-    std::shared_ptr<character> getCharacter() const;
+    std::shared_ptr<Character> getCharacter() const;
 
-    std::shared_ptr<character> &&MoveCharacter();
+    std::shared_ptr<Character> &&MoveCharacter();
 
-    void setCharacter(std::shared_ptr<character> Char);
+    void setCharacter(std::shared_ptr<Character> character);
 
     Coords_t getCoords() const;
 
     bool isWalkable() const;
 
 protected:
-    std::unique_ptr<terrain> Terrain;
-    std::shared_ptr<object> Object;
-    std::shared_ptr<character> Character;
+    std::unique_ptr<Terrain> terrain;
+    std::shared_ptr<Object> object;
+    std::shared_ptr<Character> character;
     Coords_t coords;
 };

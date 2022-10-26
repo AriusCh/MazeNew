@@ -5,50 +5,49 @@
 #include "item.h"
 
 using std::string;
-using std::pair;
 using std::shared_ptr;
 using std::unique_ptr;
 
 using
 enum itemType;
 
-character::character(string name, char charForm) : name(std::move(name)), charForm(charForm) {
+Character::Character(string name, char charForm) : name(std::move(name)), charForm(charForm) {
 
 }
 
-char character::getCharForm() const {
+char Character::getCharForm() const {
     return charForm;
 }
 
-std::shared_ptr<cell> character::getCell() const {
-    return Cell.lock();
+std::shared_ptr<Cell> Character::getCell() const {
+    return cell.lock();
 
 }
 
-void character::setCell(shared_ptr<cell> Cell) {
-    this->Cell = Cell;
+void Character::setCell(shared_ptr<Cell> cell) {
+    this->cell = cell;
 }
 
-std::list<item>& character::getInventory() {
-    return Inventory;
+std::list<Item>& Character::getInventory() {
+    return inventory;
 }
 
-int character::getHealthPoints() const {
+int Character::getHealthPoints() const {
     return healthPoints;
 }
 
-void character::setHealthPoints(int newHealthPoints) {
+void Character::setHealthPoints(int newHealthPoints) {
     this->healthPoints = newHealthPoints;
 }
 
-int character::calculateDamage() const{
+int Character::calculateDamage() const{
     return baseDamage;
 }
 
-void character::damageHealthPoints(int damage) {
+void Character::damageHealthPoints(int damage) {
     healthPoints -= damage;
 }
 
-void character::addItem(item Item) {
-    Inventory.push_back(Item);
+void Character::addItem(Item item) {
+    inventory.push_back(item);
 }

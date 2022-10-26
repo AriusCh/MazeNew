@@ -1,8 +1,8 @@
 #pragma once
 
-class object {
+class Object {
 public:
-    object();
+    Object();
 
 private:
 };

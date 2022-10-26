@@ -7,10 +7,10 @@ enum class itemType {
     Armor
 };
 
-class item {
+class Item {
 public:
-    item(itemType type, std::string name);
-    ~item();
+    Item(itemType type, std::string name);
+    ~Item();
 
     std::string getName() const;
 

@@ -4,6 +4,6 @@
 
 #include "object.h"
 
-object::object() {
+Object::Object() {
 
 }

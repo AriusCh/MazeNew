@@ -30,19 +30,19 @@ void terminal::delay(int milSec) {
     while (clock() < startTime + milSec);
 }
 
-void terminal::print(const std::shared_ptr<dungeon> &Dungeon) {
+void terminal::print(const std::shared_ptr<Dungeon> &dungeon) {
     terminal::clearScreen();
-    auto level = Dungeon->getLevel();
+    auto level = dungeon->getLevel();
     int terminalHeight = LINES;
     int terminalWidth = COLS;
-    int dungeonHeight = Dungeon->getHeight();
-    int dungeonWidth = Dungeon->getWidth();
+    int dungeonHeight = dungeon->getHeight();
+    int dungeonWidth = dungeon->getWidth();
 
     int startY = 0, startX = 0;
     int endY = dungeonHeight, endX = dungeonWidth;
     int moveY = 0, moveX = 0;
 
-    auto playerCoords = player::getPlayer()->getCell()->getCoords();
+    auto playerCoords = Player::getPlayer()->getCell()->getCoords();
     if (terminalHeight > dungeonHeight) {
         moveY = (terminalHeight - dungeonHeight) / 2;
     } else {
@@ -77,12 +77,12 @@ void terminal::print(const std::shared_ptr<dungeon> &Dungeon) {
     refreshScreen();
 }
 
-void terminal::printCell(const std::shared_ptr<cell> &Cell) {
-    addch(Cell->getCharForm());
+void terminal::printCell(const std::shared_ptr<Cell> &cell) {
+    addch(cell->getCharForm());
 }
 
 void terminal::printPlayerInventory() {
-    auto& inv = player::getPlayer()->getInventory();
+    auto& inv = Player::getPlayer()->getInventory();
     auto n = inv.size();
     auto it = inv.begin();
     for (int i = 0; i < playerInventorySizeY && it != inv.end(); i++, it++) {

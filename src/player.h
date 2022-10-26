@@ -4,15 +4,15 @@
 
 #include <memory>
 
-class player : public character{
+class Player : public Character{
 public:
-    player(player &other) = delete;
-    void operator=(const player &other) = delete;
+    Player(Player &other) = delete;
+    void operator=(const Player &other) = delete;
 
-    static std::shared_ptr<player> getPlayer();
+    static std::shared_ptr<Player> getPlayer();
 
 private:
-    player();
+    Player();
 
-    static std::shared_ptr<player> Player;
+    static std::shared_ptr<Player> player;
 };

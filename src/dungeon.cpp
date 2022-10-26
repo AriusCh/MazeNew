@@ -13,49 +13,49 @@ using std::make_unique;
 
 using enum terrainType;
 
-dungeon::dungeon() : level(height, vector<shared_ptr<cell>>(width)) {
+Dungeon::Dungeon() : level(height, vector<shared_ptr<Cell>>(width)) {
     generateEmptyLevel();
 }
 
-const vector<vector<shared_ptr<cell>>> &dungeon::getLevel() const {
+const vector<vector<shared_ptr<Cell>>> &Dungeon::getLevel() const {
     return level;
 }
 
-void dungeon::generateEmptyLevel() {
+void Dungeon::generateEmptyLevel() {
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             Coords_t coords = {i, j};
-            std::shared_ptr<cell> Cell;
+            std::shared_ptr<Cell> cell;
             if (i == 0 || i == height - 1 || j == 0 || j == width - 1) {
-                Cell = make_shared<cell>(Wall, coords);
-                level[i][j] = Cell;
+                cell = make_shared<Cell>(Wall, coords);
+                level[i][j] = cell;
             } else {
-                Cell = make_shared<cell>(Ground, coords);
-                level[i][j] = Cell;
+                cell = make_shared<Cell>(Ground, coords);
+                level[i][j] = cell;
             }
         }
     }
-    level[height / 2][width / 2]->setCharacter(player::getPlayer());
-    addCharacter(player::getPlayer());
-    player::getPlayer()->addItem({itemType::Weapon, "Dagger"});
+    level[height / 2][width / 2]->setCharacter(Player::getPlayer());
+    addCharacter(Player::getPlayer());
+    Player::getPlayer()->addItem({itemType::Weapon, "Dagger"});
 
-    auto frog = make_shared<character>("Frog", 'f');
+    auto frog = make_shared<Character>("Frog", 'f');
     level[1][1]->setCharacter(frog);
     addCharacter(frog);
 }
 
-void dungeon::addCharacter(shared_ptr<character> Char) {
-    characters.push_back(Char);
+void Dungeon::addCharacter(shared_ptr<Character> character) {
+    characters.push_back(character);
 }
 
-std::shared_ptr<cell> dungeon::getCellAt(Coords_t coords) const {
+std::shared_ptr<Cell> Dungeon::getCellAt(Coords_t coords) const {
     if (coords.y >= height || coords.y < 0 || coords.x >= width || coords.x < 0)
         return nullptr;
     return level[coords.y][coords.x];
 }
 
 // newCoords are set relatively to the current position
-void dungeon::tryToMove(Coords_t from, Coords_t to) {
+void Dungeon::tryToMove(Coords_t from, Coords_t to) {
     auto fromCell = getCellAt(from);
     auto toCell = getCellAt(to);
 
@@ -66,7 +66,7 @@ void dungeon::tryToMove(Coords_t from, Coords_t to) {
     toCell->setCharacter(Char);
 }
 
-bool dungeon::checkMove(std::shared_ptr<cell> fromCell, std::shared_ptr<cell> toCell) {
+bool Dungeon::checkMove(std::shared_ptr<Cell> fromCell, std::shared_ptr<Cell> toCell) {
     if (!fromCell || !toCell)
         return false;
 
@@ -79,15 +79,15 @@ bool dungeon::checkMove(std::shared_ptr<cell> fromCell, std::shared_ptr<cell> to
     return true;
 }
 
-int dungeon::getHeight() const {
+int Dungeon::getHeight() const {
     return height;
 }
 
-int dungeon::getWidth() const {
+int Dungeon::getWidth() const {
     return width;
 }
 
-void dungeon::tryToAttackMelee(std::shared_ptr<character> attacker, Coords_t direction) {
+void Dungeon::tryToAttackMelee(std::shared_ptr<Character> attacker, Coords_t direction) {
     auto defender = level[direction.y][direction.x]->getCharacter();
 
     if (!defender)
@@ -101,4 +101,4 @@ void dungeon::tryToAttackMelee(std::shared_ptr<character> attacker, Coords_t dir
     }
 }
 
-dungeon::~dungeon() = default;
+Dungeon::~Dungeon() = default;

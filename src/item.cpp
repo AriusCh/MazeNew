@@ -3,11 +3,11 @@
 using enum itemType;
 using std::string;
 
-item::item(itemType type, string name) : type(type), name(name) {
+Item::Item(itemType type, string name) : type(type), name(name) {
 }
 
-string item::getName() const {
+string Item::getName() const {
     return name;
 }
 
-item::~item() = default;
+Item::~Item() = default;

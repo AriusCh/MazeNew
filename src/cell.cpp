@@ -5,50 +5,49 @@
 #include "terrain.h"
 #include "character.h"
 #include "object.h"
-#include "dungeon.h"
 
 using std::unique_ptr;
 using std::make_unique;
 using std::shared_ptr;
 
-cell::~cell() = default;
+Cell::~Cell() = default;
 
-cell::cell(unique_ptr<terrain> Terrain, Coords_t coords) : Terrain(std::move(Terrain)), coords(coords) {
+Cell::Cell(unique_ptr<Terrain> terrain, Coords_t coords) : terrain(std::move(terrain)), coords(coords) {
 }
 
-cell::cell(terrainType TerrainType, Coords_t coords) : Terrain(make_unique<terrain>(TerrainType)), coords(coords) {
+Cell::Cell(terrainType TerrainType, Coords_t coords) : terrain(make_unique<Terrain>(TerrainType)), coords(coords) {
 
 }
 
-char cell::getCharForm() {
-    if (Character) {
-        return Character->getCharForm();
+char Cell::getCharForm() {
+    if (character) {
+        return character->getCharForm();
     }
 
-    return Terrain->getCharForm();
+    return terrain->getCharForm();
 }
 
-void cell::setCharacter(shared_ptr<character> Char) {
-    if (Character)
-        this->Character->setCell(nullptr);
-    this->Character = std::move(Char);
-    if (!Character)
+void Cell::setCharacter(shared_ptr<Character> character) {
+    if (this->character)
+        this->character->setCell(nullptr);
+    this->character = std::move(character);
+    if (!this->character)
         return;
-    Character->setCell(shared_from_this());
+    this->character->setCell(shared_from_this());
 }
 
-std::shared_ptr<character> cell::getCharacter() const {
-    return Character;
+std::shared_ptr<Character> Cell::getCharacter() const {
+    return character;
 }
 
-Coords_t cell::getCoords() const {
+Coords_t Cell::getCoords() const {
     return coords;
 }
 
-bool cell::isWalkable() const {
-    return Terrain->getIsWalkable();
+bool Cell::isWalkable() const {
+    return terrain->getIsWalkable();
 }
 
-std::shared_ptr<character> &&cell::MoveCharacter() {
-    return std::move(Character);
+std::shared_ptr<Character> &&Cell::MoveCharacter() {
+    return std::move(character);
 }
