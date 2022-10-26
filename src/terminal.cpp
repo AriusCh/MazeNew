@@ -4,10 +4,13 @@
 #include "cell.h"
 #include "curses.h"
 #include "player.h"
+#include "item.h"
 
 #include <ctime>
 
 int delayMilSec = 30;
+int playerInventorySizeY = 20;
+int playerInventorySizeX = 30;
 
 void terminal::initialize() {
     initscr(); // Initialize ncurses
@@ -76,6 +79,16 @@ void terminal::print(const std::shared_ptr<dungeon> &Dungeon) {
 
 void terminal::printCell(const std::shared_ptr<cell> &Cell) {
     addch(Cell->getCharForm());
+}
+
+void terminal::printPlayerInventory() {
+    auto& inv = player::getPlayer()->getInventory();
+    auto n = inv.size();
+    auto it = inv.begin();
+    for (int i = 0; i < playerInventorySizeY && it != inv.end(); i++, it++) {
+        mvprintw(i, COLS - playerInventorySizeX - 1, "%s", it->getName().c_str());
+    }
+    terminal::refreshScreen();
 }
 
 void terminal::clearScreen() {

@@ -12,6 +12,7 @@ public:
 private:
     void processGameplayInput();
     void movePlayer(int key);
+    void openInventory();
     void attackMelee();
 
     std::shared_ptr<dungeon> Dungeon;

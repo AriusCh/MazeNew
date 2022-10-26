@@ -4,6 +4,7 @@
 #include "terminal.h"
 #include "player.h"
 #include "cell.h"
+#include "curses.h"
 
 game::game() {
 
@@ -35,6 +36,9 @@ void game::processGameplayInput() {
             break;
         case 'a':
             attackMelee();
+            break;
+        case 'i':
+            openInventory();
             break;
         case 'q':
             endSession = true;
@@ -85,13 +89,13 @@ void game::attackMelee() {
     auto coords = PlayerCell->getCoords();
     switch (direction) {
         case '1':
-            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y + 1,  coords.x - 1});
+            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y + 1, coords.x - 1});
             break;
         case '2':
-            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y + 1,  coords.x});
+            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y + 1, coords.x});
             break;
         case '3':
-            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y + 1,  coords.x + 1});
+            Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y + 1, coords.x + 1});
         case '4':
             Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y, coords.x - 1});
             break;
@@ -107,5 +111,18 @@ void game::attackMelee() {
         case '9':
             Dungeon->tryToAttackMelee(player::getPlayer(), {coords.y - 1, coords.x + 1});
             break;
+    }
+}
+
+void game::openInventory() {
+    terminal::printPlayerInventory();
+    while (true) {
+        auto key = terminal::getKey();
+        switch (key) {
+            case 'i':
+                return;
+            case 27:
+                return;
+        }
     }
 }

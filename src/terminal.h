@@ -11,6 +11,7 @@ namespace terminal {
     void delay(int milSec);
     void print(const std::shared_ptr<dungeon> &Dungeon);
     void printCell(const std::shared_ptr<cell>& cell);
+    void printPlayerInventory();
     void clearScreen();
     void refreshScreen();
     int getKey();

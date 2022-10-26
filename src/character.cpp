@@ -8,7 +8,6 @@ using std::string;
 using std::pair;
 using std::shared_ptr;
 using std::unique_ptr;
-using std::vector;
 
 using
 enum itemType;
@@ -30,7 +29,7 @@ void character::setCell(shared_ptr<cell> Cell) {
     this->Cell = Cell;
 }
 
-vector<unique_ptr<item>>& character::getInventory() {
+std::list<item>& character::getInventory() {
     return Inventory;
 }
 
@@ -48,4 +47,8 @@ int character::calculateDamage() const{
 
 void character::damageHealthPoints(int damage) {
     healthPoints -= damage;
+}
+
+void character::addItem(item Item) {
+    Inventory.push_back(Item);
 }

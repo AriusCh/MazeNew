@@ -2,7 +2,7 @@
 
 #include <string>
 #include <memory>
-#include <vector>
+#include <list>
 
 class cell;
 class item;
@@ -14,7 +14,8 @@ public:
     char getCharForm() const;
     [[nodiscard]] std::shared_ptr<cell> getCell() const;
     void setCell(std::shared_ptr<cell> Cell);
-    std::vector<std::unique_ptr<item>>& getInventory();
+    std::list<item>& getInventory();
+    void addItem(item Item);
     int getHealthPoints() const;
     void setHealthPoints(int newHealthPoints);
     void damageHealthPoints(int damage);
@@ -25,7 +26,7 @@ protected:
     std::string name;
     char charForm;
     std::weak_ptr<cell> Cell;
-    std::vector<std::unique_ptr<item>> Inventory;
+    std::list<item> Inventory;
 
     int baseDamage = 4;
     int healthPoints = 10;
