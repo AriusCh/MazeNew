@@ -13,6 +13,7 @@ int playerInventorySizeY = 20;
 int playerInventorySizeX = 30;
 
 void terminal::initialize() {
+    setlocale(LC_ALL, "");
     initscr(); // Initialize ncurses
     raw(); // Disable control characters (CTRL-C, CTRL-Z, etc.)
     noecho(); // Disable echo (thx cap)
@@ -82,11 +83,34 @@ void terminal::printCell(const std::shared_ptr<Cell> &cell) {
 }
 
 void terminal::printPlayerInventory() {
-    auto& inv = Player::getPlayer()->getInventory();
-    auto n = inv.size();
+    auto &inv = Player::getPlayer()->getInventory();
+    playerInventorySizeY = LINES - 1;
     auto it = inv.begin();
-    for (int i = 0; i < playerInventorySizeY && it != inv.end(); i++, it++) {
-        mvprintw(i, COLS - playerInventorySizeX - 1, "%s", it->getName().c_str());
+
+
+    for (int i = 0; i < playerInventorySizeY; i++) {
+        move(i, COLS - playerInventorySizeX);
+        for (int j = COLS - playerInventorySizeX; j < COLS; j++) {
+            if (i == 0) {
+                if (j == COLS - playerInventorySizeX) {
+                    printw("\u250F");
+                } else if (j == COLS - 1) {
+                    printw("\u2513");
+                } else {
+                    printw("\u2501");
+                }
+            } else {
+                printw(" ");
+            }
+        }
+    }
+
+    for (int i = 1; i < playerInventorySizeY && it != inv.end(); i++, it++) {
+        auto name = it->getName();
+        if (name.length() > playerInventorySizeX) {
+            name = name.substr(0, playerInventorySizeX - 3) + "...";
+        }
+        mvprintw(i, COLS - playerInventorySizeX, "%s", name.c_str());
     }
     terminal::refreshScreen();
 }

@@ -49,5 +49,6 @@ bool Cell::isWalkable() const {
 }
 
 std::shared_ptr<Character> &&Cell::MoveCharacter() {
+    character->setCell(nullptr);
     return std::move(character);
 }
