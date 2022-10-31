@@ -14,15 +14,15 @@ bool endSession = false;
 
 void Game::start() {
     dungeon = std::make_shared<Dungeon>();
+    auto term = Terminal::getTerminal();
     while (!endSession) {
-        terminal::clearScreen();
-        terminal::print(dungeon);
+        term->print(dungeon);
         processGameplayInput();
     }
 }
 
 void Game::processGameplayInput() {
-    auto key = terminal::getKey();
+    auto key = getch();
     switch (key) {
         case '1':
         case '2':
@@ -81,7 +81,7 @@ void Game::movePlayer(int key) {
 }
 
 void Game::attackMelee() {
-    auto direction = terminal::getKey();
+    auto direction = getch();
     auto player = Player::getPlayer();
     auto playerCell = player->getCell();
     if (!playerCell)
@@ -115,13 +115,14 @@ void Game::attackMelee() {
 }
 
 void Game::openInventory() {
-    terminal::printPlayerInventory();
+    auto term = Terminal::getTerminal();
+    term->openInventory();
     while (true) {
-        auto key = terminal::getKey();
+        auto key = getch();
         switch (key) {
             case 'i':
-                return;
             case 27:
+                term->closeInventory();
                 return;
         }
     }
