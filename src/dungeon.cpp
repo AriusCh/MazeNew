@@ -62,7 +62,7 @@ void Dungeon::tryToMove(Coords_t from, Coords_t to) {
     if (!checkMove(fromCell, toCell))
         return;
 
-    auto Char = fromCell->MoveCharacter();
+    auto Char = fromCell->moveCharacter();
     toCell->setCharacter(Char);
 }
 

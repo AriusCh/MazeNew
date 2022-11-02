@@ -6,9 +6,7 @@
 #include "cell.h"
 #include "curses.h"
 
-Game::Game() {
-
-}
+Game::Game() = default;
 
 bool endSession = false;
 

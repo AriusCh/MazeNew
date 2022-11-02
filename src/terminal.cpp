@@ -29,9 +29,19 @@ void Terminal::end() {
 
 Terminal::Terminal() {
     initialize();
+    prevLines = LINES;
+    prevCols = COLS;
+    winMain = newwin(prevLines - 1, prevCols, 0, 0);
+    refresh();
 }
 
 Terminal::~Terminal() {
+    if (winMain)
+        delwin(winMain);
+    if (winInventory)
+        delwin(winInventory);
+    if (winStatusLine)
+        delwin(winStatusLine);
     end();
 }
 
@@ -75,10 +85,13 @@ void Terminal::openInventory() {
         it++;
     }
     resize_term(0, 0);
+    updateStatusLine();
     wrefresh(winInventory);
 }
 
 void Terminal::closeInventory() {
+    wclear(winInventory);
+    wrefresh(winInventory);
     delwin(winInventory);
     winInventory = nullptr;
 }
@@ -92,10 +105,12 @@ std::shared_ptr<Terminal> Terminal::getTerminal() {
 }
 
 void Terminal::print(const std::shared_ptr<Dungeon> &dungeon) {
-    clear();
+    wclear(winMain);
+    updateWindowSizes();
     const auto &level = dungeon->getLevel();
-    int terminalHeight = LINES;
-    int terminalWidth = COLS;
+    int terminalHeight;
+    int terminalWidth;
+    getmaxyx(winMain, terminalHeight, terminalWidth);
     int dungeonHeight = dungeon->getHeight();
     int dungeonWidth = dungeon->getWidth();
 
@@ -130,17 +145,67 @@ void Terminal::print(const std::shared_ptr<Dungeon> &dungeon) {
     }
 
     for (int i = startY; i < endY; i++) {
-        move(moveY + i - startY, moveX);
+        wmove(winMain, moveY + i - startY, moveX);
         for (int j = startX; j < endX; j++) {
-            print(level[i][j]);
+            print(winMain, level[i][j]);
         }
     }
-    resize_term(0, 0);
-    refresh();
+    wrefresh(winMain);
+    updateStatusLine();
 }
 
-void Terminal::print(const std::shared_ptr<Cell> &cell) {
-    printw("%c", cell->getCharForm());
+void Terminal::print(WINDOW *win, const std::shared_ptr<Cell> &cell) {
+    wprintw(win, "%c", cell->getCharForm());
+}
+
+void Terminal::updateStatusLine() {
+    if (!winStatusLine) {
+        winStatusLine = newwin(1, COLS, LINES - 1, 0);
+    }
+    wclear(winStatusLine);
+    mvwprintw(winStatusLine, 0, 0, "%s", statusLineText.c_str());
+    wrefresh(winStatusLine);
+}
+
+void Terminal::refreshScreen() {
+    updateWindowSizes();
+    if (winMain) {
+        wrefresh(winMain);
+    }
+    if (winInventory) {
+        wrefresh(winInventory);
+    }
+    if (winStatusLine) {
+        wrefresh(winStatusLine);
+    }
+}
+
+void Terminal::updateWindowSizes() {
+    resize_term(0, 0);
+    if (prevLines == LINES && prevCols == COLS)
+        return;
+
+    prevLines = LINES;
+    prevCols = COLS;
+
+    if (winMain) {
+        wclear(winMain);
+        wrefresh(winMain);
+        delwin(winMain);
+        winMain = newwin(prevLines - 1, prevCols, 0, 0);
+    }
+    if (winInventory) {
+        wclear(winInventory);
+        wrefresh(winInventory);
+        delwin(winInventory);
+        openInventory(); // TEMPORARILY
+    }
+    if (winStatusLine) {
+        wclear(winStatusLine);
+        wrefresh(winStatusLine);
+        delwin(winStatusLine);
+        winStatusLine = newwin(1, prevCols, prevLines - 1, 0);
+    }
 }
 
 //void terminal::delay(int milSec) {

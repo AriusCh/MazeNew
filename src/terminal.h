@@ -2,6 +2,7 @@
 
 #include "curses.h"
 #include <memory>
+#include <string>
 
 class Dungeon;
 class Cell;
@@ -14,10 +15,14 @@ public:
     static std::shared_ptr<Terminal> getTerminal();
 
     void print(const std::shared_ptr<Dungeon> &dungeon);
-    void print(const std::shared_ptr<Cell> &cell);
+    void print(WINDOW *win, const std::shared_ptr<Cell> &cell);
 
     void openInventory();
     void closeInventory();
+
+    void refreshScreen();
+
+    std::string statusLineText = "ABOBABABBABABABBABBABBSBSDJASBDKJASDKJHUIQHWIUOEQRIUQHEWUIOEHWQIUEBLYAT";
 
 private:
     Terminal();
@@ -25,9 +30,16 @@ private:
     static void end();
     static std::shared_ptr<Terminal> term;
 
+    void updateStatusLine();
+    void updateWindowSizes();
+
     int invSizeY = 30;
     int invSizeX = 30;
 
-    WINDOW *winInventory;
-    WINDOW *winStatusLine;
+    WINDOW *winMain = nullptr;
+    WINDOW *winInventory = nullptr;
+    WINDOW *winStatusLine = nullptr;
+
+    int prevLines = 0;
+    int prevCols = 0;
 };

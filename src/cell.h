@@ -26,9 +26,9 @@ public:
 
     std::shared_ptr<Character> getCharacter() const;
 
-    std::shared_ptr<Character> &&MoveCharacter();
+    std::shared_ptr<Character> &&moveCharacter();
 
-    void setCharacter(std::shared_ptr<Character> character);
+    void setCharacter(std::shared_ptr<Character> newChar);
 
     Coords_t getCoords() const;
 
