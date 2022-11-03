@@ -24,8 +24,8 @@ std::shared_ptr<Cell> Character::getCell() const {
 
 }
 
-void Character::setCell(shared_ptr<Cell> cell) {
-    this->cell = cell;
+void Character::setCell(const shared_ptr<Cell> &newCell) {
+    this->cell = newCell;
 }
 
 std::list<Item>& Character::getInventory() {

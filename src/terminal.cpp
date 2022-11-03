@@ -6,13 +6,11 @@
 #include "player.h"
 #include "item.h"
 
-#include <ctime>
+//#include <ctime>
 
 std::shared_ptr<Terminal> Terminal::term = nullptr;
 
-int delayMilSec = 30;
-int playerInventorySizeY = 20;
-int playerInventorySizeX = 30;
+//int delayMilSec = 30;
 
 void Terminal::initialize() {
     setlocale(LC_ALL, "");
@@ -31,49 +29,42 @@ Terminal::Terminal() {
     initialize();
     prevLines = LINES;
     prevCols = COLS;
-    winMain = newwin(prevLines - 1, prevCols, 0, 0);
-    refresh();
+    winMain = createWindow(prevLines - 1, prevCols, 0, 0);
 }
 
 Terminal::~Terminal() {
-    if (winMain)
-        delwin(winMain);
-    if (winInventory)
-        delwin(winInventory);
-    if (winStatusLine)
-        delwin(winStatusLine);
     end();
 }
 
 void Terminal::openInventory() {
-    winInventory = newwin(invSizeY, invSizeX, 0, COLS - invSizeX);
+    winInventory = createWindow(invSizeY, invSizeX, 0, COLS - invSizeX);
     for (int i = 0; i < invSizeY; i++) {
-        wmove(winInventory, i, 0);
+        winInventory->moveCurs(i, 0);
         for (int j = 0; j < invSizeX; j++) {
             if (i == 0) {
                 if (j == 0) {
-                    wprintw(winInventory, "\u250F");
+                    winInventory->print("\u250F");
                 } else if (j == invSizeX - 1) {
-                    wprintw(winInventory, "\u2513");
+                    winInventory->print("\u2513");
                 } else {
-                    wprintw(winInventory, "\u2501");
+                    winInventory->print("\u2501");
                 }
             } else if (i == invSizeY - 1) {
                 if (j == 0) {
-                    wprintw(winInventory, "\u2517");
+                    winInventory->print("\u2517");
                 } else if (j == invSizeX - 1) {
-                    wprintw(winInventory, "\u251B");
+                    winInventory->print("\u251B");
                 } else {
-                    wprintw(winInventory, "\u2501");
+                    winInventory->print("\u2501");
                 }
             } else if (j == 0 || j == invSizeX - 1) {
-                wprintw(winInventory, "\u2503");
+                winInventory->print("\u2503");
             } else {
-                wprintw(winInventory, " ");
+                winInventory->print(" ");
             }
         }
     }
-    mvwprintw(winInventory, 0, 1, "INVENTORY");
+    winInventory->mvprint(0, 1, "INVENTORY");
 
     auto &inv = Player::getPlayer()->getInventory();
     auto it = inv.begin();
@@ -81,36 +72,33 @@ void Terminal::openInventory() {
         auto name = it->getName();
         if (name.length() > invSizeX - 2)
             name = name.substr(0, invSizeX - 5) + "...";
-        mvwprintw(winInventory, i, 1, "%s", name.c_str());
+        winInventory->mvprint(i, 1, name);
         it++;
     }
-    resize_term(0, 0);
-    updateStatusLine();
-    wrefresh(winInventory);
+    refreshScreen();
 }
 
 void Terminal::closeInventory() {
-    wclear(winInventory);
-    wrefresh(winInventory);
-    delwin(winInventory);
-    winInventory = nullptr;
+    winInventory->clear();
+    winInventory.reset();
+    refreshScreen();
 }
 
 std::shared_ptr<Terminal> Terminal::getTerminal() {
     if (!term) {
-        struct terminalMakeSharedEnabler : public Terminal {};
+        struct terminalMakeSharedEnabler : public Terminal {
+        };
         term = std::make_shared<terminalMakeSharedEnabler>();
     }
     return term;
 }
 
 void Terminal::print(const std::shared_ptr<Dungeon> &dungeon) {
-    wclear(winMain);
     updateWindowSizes();
+    winMain->clear();
     const auto &level = dungeon->getLevel();
-    int terminalHeight;
-    int terminalWidth;
-    getmaxyx(winMain, terminalHeight, terminalWidth);
+    int terminalHeight = winMain->sizeY;
+    int terminalWidth = winMain->sizeX;
     int dungeonHeight = dungeon->getHeight();
     int dungeonWidth = dungeon->getWidth();
 
@@ -145,39 +133,30 @@ void Terminal::print(const std::shared_ptr<Dungeon> &dungeon) {
     }
 
     for (int i = startY; i < endY; i++) {
-        wmove(winMain, moveY + i - startY, moveX);
+        winMain->moveCurs(moveY + i - startY, moveX);
         for (int j = startX; j < endX; j++) {
-            print(winMain, level[i][j]);
+            print(level[i][j]);
         }
     }
-    wrefresh(winMain);
-    updateStatusLine();
+    refreshScreen();
 }
 
-void Terminal::print(WINDOW *win, const std::shared_ptr<Cell> &cell) {
-    wprintw(win, "%c", cell->getCharForm());
+void Terminal::print(const std::shared_ptr<Cell> &cell) {
+//    win->print(std::to_string(cell->getCharForm()));
+    printw("%c", cell->getCharForm());
 }
 
 void Terminal::updateStatusLine() {
     if (!winStatusLine) {
-        winStatusLine = newwin(1, COLS, LINES - 1, 0);
+        winStatusLine = createWindow(1, COLS, LINES - 1, 0);
     }
-    wclear(winStatusLine);
-    mvwprintw(winStatusLine, 0, 0, "%s", statusLineText.c_str());
-    wrefresh(winStatusLine);
+    winStatusLine->clear();
+    winStatusLine->mvprint(0, 0, statusLineText);
 }
 
 void Terminal::refreshScreen() {
-    updateWindowSizes();
-    if (winMain) {
-        wrefresh(winMain);
-    }
-    if (winInventory) {
-        wrefresh(winInventory);
-    }
-    if (winStatusLine) {
-        wrefresh(winStatusLine);
-    }
+    updateStatusLine();
+    refresh();
 }
 
 void Terminal::updateWindowSizes() {
@@ -189,23 +168,48 @@ void Terminal::updateWindowSizes() {
     prevCols = COLS;
 
     if (winMain) {
-        wclear(winMain);
-        wrefresh(winMain);
-        delwin(winMain);
-        winMain = newwin(prevLines - 1, prevCols, 0, 0);
+        winMain->clear();
+        winMain = createWindow(prevLines - 1, prevCols, 0, 0);
     }
     if (winInventory) {
-        wclear(winInventory);
-        wrefresh(winInventory);
-        delwin(winInventory);
+        winInventory->clear();
         openInventory(); // TEMPORARILY
     }
     if (winStatusLine) {
-        wclear(winStatusLine);
-        wrefresh(winStatusLine);
-        delwin(winStatusLine);
-        winStatusLine = newwin(1, prevCols, prevLines - 1, 0);
+        winStatusLine->clear();
+        winStatusLine = createWindow(1, prevCols, prevLines - 1, 0);
     }
+    refreshScreen();
+}
+
+void Terminal::WIN::moveCurs(int Y, int X) const {
+    move(startY + Y, startX + X);
+}
+
+void Terminal::WIN::print(const std::string &str) const {
+    printw("%s", str.c_str());
+}
+
+void Terminal::WIN::mvprint(int Y, int X, const std::string &str) const {
+    mvprintw(startY + Y, startX + X, "%s", str.c_str());
+}
+
+void Terminal::WIN::clear() const {
+    move(startY, startX);
+    for (int i = 0; i < sizeY; i++) {
+        for (int j = 0; j < sizeX; j++) {
+            printw(" ");
+        }
+    }
+}
+
+std::unique_ptr<Terminal::WIN> Terminal::createWindow(int sizeY, int sizeX, int startY, int startX) const {
+    auto win = std::make_unique<WIN>();
+    win->sizeY = sizeY;
+    win->sizeX = sizeX;
+    win->startY = startY;
+    win->startX = startX;
+    return win;
 }
 
 //void terminal::delay(int milSec) {

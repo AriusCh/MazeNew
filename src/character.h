@@ -13,7 +13,7 @@ public:
 
     char getCharForm() const;
     [[nodiscard]] std::shared_ptr<Cell> getCell() const;
-    void setCell(std::shared_ptr<Cell> cell);
+    void setCell(const std::shared_ptr<Cell>& cell);
     std::list<Item>& getInventory();
     void addItem(Item item);
     int getHealthPoints() const;
