@@ -69,7 +69,7 @@ void Terminal::openInventory() {
     auto &inv = Player::getPlayer()->getInventory();
     auto it = inv.begin();
     for (int i = 1; i < invSizeY - 1 && it != inv.end(); i++) {
-        auto name = it->getName();
+        auto name = (*it)->getName();
         if (name.length() > invSizeX - 2)
             name = name.substr(0, invSizeX - 5) + "...";
         winInventory->mvprint(i, 1, name);

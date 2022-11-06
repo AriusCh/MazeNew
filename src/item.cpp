@@ -10,4 +10,8 @@ string Item::getName() const {
     return name;
 }
 
+itemType Item::getType() const {
+    return type;
+}
+
 Item::~Item() = default;

@@ -16,7 +16,8 @@ set(
         src/curses.h
         src/terrain.cpp src/terrain.h
         src/object.cpp src/object.h
-        src/item.cpp src/item.h)
+        src/item.cpp src/item.h
+        src/weapon.cpp src/weapon.h)
 
 set(build_dir "MazeNew")
 
