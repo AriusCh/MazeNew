@@ -118,6 +118,12 @@ void Game::openInventory() {
     while (true) {
         auto key = getch();
         switch (key) {
+            case KEY_UP:
+                term->moveInvCursUp();
+                break;
+            case KEY_DOWN:
+                term->moveInvCursDown();
+                break;
             case 'i':
             case 27:
                 term->closeInventory();

@@ -22,6 +22,9 @@ public:
 
     void refreshScreen();
 
+    void moveInvCursUp();
+    void moveInvCursDown();
+
     std::string statusLineText = "ABOBABABBABABABBABBABBYAEBALNCURSESQHWIUOEQRIUQHEWUIOEHWQIUEBLYAT";
 
 private:
@@ -50,10 +53,13 @@ private:
     int invSizeX = 30;
 
     std::unique_ptr<WIN> createWindow(int sizeY, int sizeX, int startY, int startX) const;
+    void refreshInventory();
 
     std::unique_ptr<WIN> winMain = nullptr;
     std::unique_ptr<WIN> winInventory = nullptr;
     std::unique_ptr<WIN> winStatusLine = nullptr;
+
+    int cursInvPos = 0;
 
     int prevLines = 0;
     int prevCols = 0;

@@ -65,15 +65,19 @@ void Terminal::openInventory() {
         }
     }
     winInventory->mvprint(0, 1, "INVENTORY");
+    cursInvPos = 1;
 
     auto &inv = Player::getPlayer()->getInventory();
     auto it = inv.begin();
-    for (int i = 1; i < invSizeY - 1 && it != inv.end(); i++) {
+    for (int i = 1; i < invSizeY - 1 && it != inv.end(); i++, it++) {
         auto name = it->getName();
         if (name.length() > invSizeX - 2)
             name = name.substr(0, invSizeX - 5) + "...";
+        if (i == cursInvPos)
+            attron(A_STANDOUT);
         winInventory->mvprint(i, 1, name);
-        it++;
+        if (i == cursInvPos)
+            attroff(A_STANDOUT);
     }
     refreshScreen();
 }
@@ -210,6 +214,40 @@ std::unique_ptr<Terminal::WIN> Terminal::createWindow(int sizeY, int sizeX, int 
     win->startY = startY;
     win->startX = startX;
     return win;
+}
+
+void Terminal::moveInvCursUp() {
+    cursInvPos--;
+    if (cursInvPos < 1) {
+        cursInvPos = 1;
+    }
+    refreshInventory();
+}
+
+void Terminal::moveInvCursDown() {
+    cursInvPos++;
+    refreshInventory();
+}
+
+void Terminal::refreshInventory() {
+    if (!winInventory) {
+        openInventory();
+        return;
+    }
+
+    auto &inv = Player::getPlayer()->getInventory();
+    auto it = inv.begin();
+    for (int i = 1; i < invSizeY - 1 && it != inv.end(); i++, it++) {
+        auto name = it->getName();
+        if (name.length() > invSizeX - 2)
+            name = name.substr(0, invSizeX - 5) + "...";
+        if (i == cursInvPos)
+            attron(A_STANDOUT);
+        winInventory->mvprint(i, 1, name);
+        if (i == cursInvPos)
+            attroff(A_STANDOUT);
+    }
+    refreshScreen();
 }
 
 //void terminal::delay(int milSec) {
