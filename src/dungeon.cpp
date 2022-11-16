@@ -5,6 +5,7 @@
 #include "character.h"
 #include "player.h"
 #include "item.h"
+#include "effect.h"
 
 using std::vector;
 using std::shared_ptr;

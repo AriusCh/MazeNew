@@ -3,13 +3,13 @@
 #include <utility>
 
 #include "item.h"
+#include "effect.h"
 
 using std::string;
 using std::shared_ptr;
 using std::unique_ptr;
 
-using
-enum itemType;
+using enum itemType;
 
 Character::Character(string name, char charForm) : name(std::move(name)), charForm(charForm) {
 
@@ -48,6 +48,20 @@ void Character::damageHealthPoints(int damage) {
     healthPoints -= damage;
 }
 
-void Character::addItem(Item item) {
+void Character::addItem(const Item &item) {
     inventory.push_back(item);
+}
+
+void Character::addEffect(std::unique_ptr<Effect> effect) {
+    effect->setOwner(shared_from_this());
+    effects.push_back(std::move(effect));
+}
+
+void Character::processEffects() {
+    for (auto it = effects.begin(); it != effects.end(); it++) {
+        (*it)->process();
+        if ((*it)->getDuration() <= 0) {
+            effects.erase(it);
+        }
+    }
 }
