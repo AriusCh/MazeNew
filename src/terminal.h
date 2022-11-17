@@ -24,6 +24,8 @@ public:
 
     void moveInvCursUp();
     void moveInvCursDown();
+    void moveInvPageUp();
+    void moveInvPageDown();
 
     std::string statusLineText = "ABOBABABBABABABBABBABBYAEBALNCURSESQHWIUOEQRIUQHEWUIOEHWQIUEBLYAT";
 
@@ -59,7 +61,14 @@ private:
     std::unique_ptr<WIN> winInventory = nullptr;
     std::unique_ptr<WIN> winStatusLine = nullptr;
 
-    int cursInvPos = 0;
+    int invCursPos = 0;
+    int invCurrentPage = 0;
+    int invMaxPage;
+    int invMaxPageSize;
+    const int invTopIndent = 1;
+    const int invBottomIndent = 2;
+    const int invLeftIndent = 1;
+    const int invRightIndent = 1;
 
     int prevLines = 0;
     int prevCols = 0;

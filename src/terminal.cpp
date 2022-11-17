@@ -65,21 +65,23 @@ void Terminal::openInventory() {
         }
     }
     winInventory->mvprint(0, 1, "INVENTORY");
-    cursInvPos = 1;
+    invCursPos = invTopIndent;
+    invCurrentPage = 0;
 
-    auto &inv = Player::getPlayer()->getInventory();
-    auto it = inv.begin();
-    for (int i = 1; i < invSizeY - 1 && it != inv.end(); i++, it++) {
-        auto name = it->getName();
-        if (name.length() > invSizeX - 2)
-            name = name.substr(0, invSizeX - 5) + "...";
-        if (i == cursInvPos)
-            attron(A_STANDOUT);
-        winInventory->mvprint(i, 1, name);
-        if (i == cursInvPos)
-            attroff(A_STANDOUT);
-    }
-    refreshScreen();
+    refreshInventory();
+//    auto &inv = Player::getPlayer()->getInventory();
+//    auto it = inv.begin();
+//    for (int i = 1; i < invSizeY - 1 && it != inv.end(); i++, it++) {
+//        auto name = it->getName();
+//        if (name.length() > invSizeX - 2)
+//            name = name.substr(0, invSizeX - 5) + "...";
+//        if (i == invCursPos)
+//            attron(A_STANDOUT);
+//        winInventory->mvprint(i, 1, name);
+//        if (i == invCursPos)
+//            attroff(A_STANDOUT);
+//    }
+//    refreshScreen();
 }
 
 void Terminal::closeInventory() {
@@ -156,10 +158,11 @@ void Terminal::updateStatusLine() {
     }
     winStatusLine->clear();
     winStatusLine->mvprint(0, 0, statusLineText);
+    refreshScreen();
 }
 
 void Terminal::refreshScreen() {
-    updateStatusLine();
+    updateWindowSizes();
     refresh();
 }
 
@@ -217,15 +220,37 @@ std::unique_ptr<Terminal::WIN> Terminal::createWindow(int sizeY, int sizeX, int 
 }
 
 void Terminal::moveInvCursUp() {
-    cursInvPos--;
-    if (cursInvPos < 1) {
-        cursInvPos = 1;
+    invCursPos--;
+    if (invCursPos < invTopIndent) {
+        invCursPos = invTopIndent;
     }
     refreshInventory();
 }
 
 void Terminal::moveInvCursDown() {
-    cursInvPos++;
+    invCursPos++;
+    if (invCursPos >= invSizeY - invBottomIndent) {
+        invCursPos = invSizeY - invBottomIndent - 1;
+    }
+    if (invCursPos > invMaxPageSize) {
+        invCursPos = invMaxPageSize;
+    }
+    refreshInventory();
+}
+
+void Terminal::moveInvPageUp() {
+    invCurrentPage++;
+    if (invCurrentPage > invMaxPage) {
+        invCurrentPage = invMaxPage;
+    }
+    refreshInventory();
+}
+
+void Terminal::moveInvPageDown() {
+    invCurrentPage--;
+    if (invCurrentPage < 0) {
+        invCurrentPage = 0;
+    }
     refreshInventory();
 }
 
@@ -235,20 +260,32 @@ void Terminal::refreshInventory() {
         return;
     }
 
+    // print items
     auto &inv = Player::getPlayer()->getInventory();
     auto it = inv.begin();
-    for (int i = 1; i < invSizeY - 1 && it != inv.end(); i++, it++) {
+    invMaxPage = inv.size() / (invSizeY - invTopIndent - invBottomIndent);
+    invMaxPageSize = inv.size() % (invSizeY - invTopIndent - invBottomIndent);
+    std::advance(it, invCurrentPage * (invSizeY - invBottomIndent - invTopIndent));
+    for (int i = invTopIndent; i < invSizeY - invBottomIndent && it != inv.end(); i++, it++) {
         auto name = it->getName();
-        if (name.length() > invSizeX - 2)
-            name = name.substr(0, invSizeX - 5) + "...";
-        if (i == cursInvPos)
+        // if name is too long, cut it
+        if (name.length() > invSizeX - invLeftIndent - invRightIndent)
+            name = name.substr(0, invSizeX - invLeftIndent - invRightIndent - 3) + "...";
+        if (i == invCursPos) {
             attron(A_STANDOUT);
-        winInventory->mvprint(i, 1, name);
-        if (i == cursInvPos)
+            winInventory->mvprint(i, invLeftIndent, name);
             attroff(A_STANDOUT);
+        } else {
+            winInventory->mvprint(i, invLeftIndent, name);
+        }
     }
+
+    // print currentPage / maxPage
+    winInventory->mvprint(invSizeY - 2, invLeftIndent, std::to_string(invCurrentPage + 1) + " / " + std::to_string(invMaxPage + 1));
+
     refreshScreen();
 }
+
 
 //void terminal::delay(int milSec) {
 //    milSec *= 1000;

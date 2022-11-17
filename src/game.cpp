@@ -124,6 +124,12 @@ void Game::openInventory() {
             case KEY_DOWN:
                 term->moveInvCursDown();
                 break;
+            case KEY_LEFT:
+                term->moveInvPageDown();
+                break;
+            case KEY_RIGHT:
+                term->moveInvPageUp();
+                break;
             case 'i':
             case 27:
                 term->closeInventory();
