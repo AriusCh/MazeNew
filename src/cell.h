@@ -39,4 +39,7 @@ protected:
     std::shared_ptr<Object> object;
     std::shared_ptr<Character> character;
     Coords_t coords;
+
+    bool bIsDiscovered = false;
+    bool bIsVisible = false;
 };

@@ -34,6 +34,7 @@ private:
     static void initialize();
     static void end();
     static std::shared_ptr<Terminal> term;
+    static void init_colors();
 
     void updateStatusLine();
     void updateWindowSizes();

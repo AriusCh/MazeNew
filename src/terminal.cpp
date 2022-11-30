@@ -19,6 +19,15 @@ void Terminal::initialize() {
     noecho(); // Disable echo (thx cap)
     keypad(stdscr, TRUE); // Enable F-* keys and arrow keys
     curs_set(0); // Make cursor invisible
+
+    // Init colors
+    if (has_colors() == FALSE) {
+        endwin();
+        printf("Your terminal does not support color\n");
+        exit(1);
+    }
+    start_color();
+    init_colors();
 }
 
 void Terminal::end() {
@@ -34,6 +43,10 @@ Terminal::Terminal() {
 
 Terminal::~Terminal() {
     end();
+}
+
+void Terminal::init_colors() {
+    init_pair(1, COLOR_RED, COLOR_BLACK);
 }
 
 void Terminal::openInventory() {
