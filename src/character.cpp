@@ -3,14 +3,9 @@
 #include <utility>
 
 #include "item.h"
+#include "effect.h"
 
-using std::string;
-using std::shared_ptr;
-using std::unique_ptr;
-
-//using enum itemType;
-
-Character::Character(string name, char charForm) : name(std::move(name)), charForm(charForm) {
+Character::Character(std::string name, char charForm) : name(std::move(name)), charForm(charForm) {
 
 }
 
@@ -20,10 +15,9 @@ char Character::getCharForm() const {
 
 std::shared_ptr<Cell> Character::getCell() const {
     return cell.lock();
-
 }
 
-void Character::setCell(const shared_ptr<Cell> &newCell) {
+void Character::setCell(const std::shared_ptr<Cell> &newCell) {
     this->cell = newCell;
 }
 
@@ -40,7 +34,9 @@ void Character::setHealthPoints(int newHealthPoints) {
 }
 
 int Character::calculateDamage() const{
-    if (equippedWeapon) return equippedWeapon->getDamage();
+    if (equipment.weapon) {
+        return equipment.weapon->getDamage();
+    }
     return baseDamage;
 }
 
@@ -52,14 +48,29 @@ void Character::addItem(std::unique_ptr<Item> item) {
     inventory.push_back(std::move(item));
 }
 
-void Character::equipItem(std::list<unique_ptr<Item>>::iterator item) {
-    equippedWeapon.reset(static_cast<Weapon*>((*item).release()));
-    //equippedWeapon =
-    inventory.erase(item);
+void Character::equipItem(std::list<std::unique_ptr<Item>>::iterator item) {
+    auto type = (*item)->getType();
+    unequipItem(type);
+    switch (type) {
+        case itemType::Weapon:
+            equipment.weapon.reset(static_cast<Weapon*>((*item).release()));
+            inventory.erase(item);
+            break;
+        default:
+            return;
+    }
 }
 
-void Character::unequipItem(std::unique_ptr<Item> item) {
-
+void Character::unequipItem(itemType type) {
+    switch (type) {
+        case itemType::Weapon:
+            if (equipment.weapon) {
+                inventory.push_back(std::move(equipment.weapon));
+            }
+            break;
+        default:
+            return;
+    }
 }
 
 void Character::addEffect(std::unique_ptr<Effect> effect) {

@@ -1,12 +1,13 @@
 #include "item.h"
 
-using enum itemType;
-using std::string;
+#include <utility>
 
-Item::Item(itemType type, string name) : type(type), name(name) {
+using enum itemType;
+
+Item::Item(itemType type, std::string name) : type(type), name(std::move(name)) {
 }
 
-string Item::getName() const {
+std::string Item::getName() const {
     return name;
 }
 

@@ -6,16 +6,12 @@
 #include "character.h"
 #include "object.h"
 
-using std::unique_ptr;
-using std::make_unique;
-using std::shared_ptr;
-
 Cell::~Cell() = default;
 
-Cell::Cell(unique_ptr<Terrain> terrain, Coords_t coords) : terrain(std::move(terrain)), coords(coords) {
+Cell::Cell(std::unique_ptr<Terrain> terrain, Coords_t coords) : terrain(std::move(terrain)), coords(coords) {
 }
 
-Cell::Cell(terrainType TerrainType, Coords_t coords) : terrain(make_unique<Terrain>(TerrainType)), coords(coords) {
+Cell::Cell(terrainType TerrainType, Coords_t coords) : terrain(std::make_unique<Terrain>(TerrainType)), coords(coords) {
 
 }
 
@@ -27,7 +23,7 @@ char Cell::getCharForm() {
     return terrain->getCharForm();
 }
 
-void Cell::setCharacter(shared_ptr<Character> newChar) {
+void Cell::setCharacter(std::shared_ptr<Character> newChar) {
     if (this->character)
         this->character->setCell(nullptr);
     this->character = std::move(newChar);

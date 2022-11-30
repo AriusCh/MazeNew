@@ -4,21 +4,13 @@
 #include "terrain.h"
 #include "character.h"
 #include "player.h"
-#include "item.h"
 #include "effect.h"
 
-using std::vector;
-using std::shared_ptr;
-using std::make_shared;
-using std::make_unique;
-
-using enum terrainType;
-
-Dungeon::Dungeon() : level(height, vector<shared_ptr<Cell>>(width)) {
+Dungeon::Dungeon() : level(height, std::vector<std::shared_ptr<Cell>>(width)) {
     generateEmptyLevel();
 }
 
-const vector<vector<shared_ptr<Cell>>> &Dungeon::getLevel() const {
+const std::vector<std::vector<std::shared_ptr<Cell>>> &Dungeon::getLevel() const {
     return level;
 }
 
@@ -28,10 +20,10 @@ void Dungeon::generateEmptyLevel() {
             Coords_t coords = {i, j};
             std::shared_ptr<Cell> cell;
             if (i == 0 || i == height - 1 || j == 0 || j == width - 1) {
-                cell = make_shared<Cell>(Wall, coords);
+                cell = std::make_shared<Cell>(terrainType::Wall, coords);
                 level[i][j] = cell;
             } else {
-                cell = make_shared<Cell>(Ground, coords);
+                cell = std::make_shared<Cell>(terrainType::Ground, coords);
                 level[i][j] = cell;
             }
         }
@@ -41,12 +33,12 @@ void Dungeon::generateEmptyLevel() {
     Player::getPlayer()->addItem(std::make_unique<Weapon>("Dagger", 6));
     Player::getPlayer()->equipItem(Player::getPlayer()->getInventory().begin());
 
-    auto frog = make_shared<Character>("Frog", 'f');
+    auto frog = std::make_shared<Character>("Frog", 'f');
     level[1][1]->setCharacter(frog);
     addCharacter(frog);
 }
 
-void Dungeon::addCharacter(shared_ptr<Character> character) {
+void Dungeon::addCharacter(std::shared_ptr<Character> character) {
     characters.push_back(character);
 }
 

@@ -280,7 +280,7 @@ void Terminal::refreshInventory() {
     invMaxPageSize = inv.size() % (invSizeY - invTopIndent - invBottomIndent);
     std::advance(it, invCurrentPage * (invSizeY - invBottomIndent - invTopIndent));
     for (int i = invTopIndent; i < invSizeY - invBottomIndent && it != inv.end(); i++, it++) {
-        auto name = it->getName();
+        auto name = (*it)->getName();
         // if name is too long, cut it
         if (name.length() > invSizeX - invLeftIndent - invRightIndent)
             name = name.substr(0, invSizeX - invLeftIndent - invRightIndent - 3) + "...";

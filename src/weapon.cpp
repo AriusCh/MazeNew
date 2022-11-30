@@ -1,10 +1,7 @@
 #include "weapon.h"
 #include "item.h"
 
-//using enum itemType;
-using std::string;
-
-Weapon::Weapon(string name, int damage) : Item(itemType::Weapon, name), damage(damage) {}
+Weapon::Weapon(std::string name, int damage) : Item(itemType::Weapon, std::move(name)), damage(damage) {}
 
 int Weapon::getDamage() const {
     return damage;
