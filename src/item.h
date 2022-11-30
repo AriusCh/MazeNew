@@ -10,11 +10,16 @@ enum class itemType {
 class Item {
 public:
     Item(itemType type, std::string name);
+
+    Item();
+
     ~Item();
 
     std::string getName() const;
 
-private:
+    itemType getType() const;
+
+protected:
     itemType type;
     std::string name;
 };

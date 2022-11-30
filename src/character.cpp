@@ -3,13 +3,12 @@
 #include <utility>
 
 #include "item.h"
-#include "effect.h"
 
 using std::string;
 using std::shared_ptr;
 using std::unique_ptr;
 
-using enum itemType;
+//using enum itemType;
 
 Character::Character(string name, char charForm) : name(std::move(name)), charForm(charForm) {
 
@@ -28,7 +27,7 @@ void Character::setCell(const shared_ptr<Cell> &newCell) {
     this->cell = newCell;
 }
 
-std::list<Item>& Character::getInventory() {
+std::list<std::unique_ptr<Item>> & Character::getInventory() {
     return inventory;
 }
 
@@ -41,6 +40,7 @@ void Character::setHealthPoints(int newHealthPoints) {
 }
 
 int Character::calculateDamage() const{
+    if (equippedWeapon) return equippedWeapon->getDamage();
     return baseDamage;
 }
 
@@ -48,8 +48,18 @@ void Character::damageHealthPoints(int damage) {
     healthPoints -= damage;
 }
 
-void Character::addItem(const Item &item) {
-    inventory.push_back(item);
+void Character::addItem(std::unique_ptr<Item> item) {
+    inventory.push_back(std::move(item));
+}
+
+void Character::equipItem(std::list<unique_ptr<Item>>::iterator item) {
+    equippedWeapon.reset(static_cast<Weapon*>((*item).release()));
+    //equippedWeapon =
+    inventory.erase(item);
+}
+
+void Character::unequipItem(std::unique_ptr<Item> item) {
+
 }
 
 void Character::addEffect(std::unique_ptr<Effect> effect) {
