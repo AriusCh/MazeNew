@@ -2,22 +2,22 @@
 
 #include <string>
 
-enum class itemType {
+enum class ItemType {
     Weapon,
     Armor
 };
 
 class Item {
 public:
-    Item(itemType type, std::string name);
+    Item(ItemType type, std::string name);
 
     ~Item();
 
     std::string getName() const;
 
-    itemType getType() const;
+    ItemType getType() const;
 
 protected:
-    itemType type;
+    ItemType type;
     std::string name;
 };

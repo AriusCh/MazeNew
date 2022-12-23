@@ -2,16 +2,16 @@
 
 #include <utility>
 
-using enum itemType;
+using enum ItemType;
 
-Item::Item(itemType type, std::string name) : type(type), name(std::move(name)) {
+Item::Item(ItemType type, std::string name) : type(type), name(std::move(name)) {
 }
 
 std::string Item::getName() const {
     return name;
 }
 
-itemType Item::getType() const {
+ItemType Item::getType() const {
     return type;
 }
 

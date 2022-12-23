@@ -13,9 +13,9 @@ class Effect;
 
 class Character : public std::enable_shared_from_this<Character> {
 public:
-    Character(std::string name, char charForm);
+    Character(std::string name, std::string stringForm);
 
-    char getCharForm() const;
+    std::string getStringForm() const;
     [[nodiscard]] std::shared_ptr<Cell> getCell() const;
     void setCell(const std::shared_ptr<Cell> &cell);
     std::list<std::unique_ptr<Item>>& getInventory();
@@ -26,22 +26,24 @@ public:
 
     int calculateDamage() const;
 
-    void addEffect(std::unique_ptr<Effect> effect);
+    void addEffect(std::unique_ptr<Effect>&& effect);
     void processEffects();
 
+    struct Equipment {
+        std::unique_ptr<Weapon> weapon;
+    };
     void equipItem (std::list<std::unique_ptr<Item>>::iterator item);
-    void unequipItem (itemType type);
+    void unEquipItem (ItemType type);
+    const Equipment &getEquipment() const;
 
 protected:
     std::string name;
-    char charForm;
+    std::string stringForm;
     std::weak_ptr<Cell> cell;
     std::list<std::unique_ptr<Item>> inventory;
     std::list<std::unique_ptr<Effect>> effects;
 
-    struct Equipment {
-        std::unique_ptr<Weapon> weapon;
-    } equipment;
+    Equipment equipment;
 
     int baseDamage = 4;
     int healthPoints = 10;

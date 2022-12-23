@@ -1,8 +1,8 @@
 #include "game.h"
 
 int main() {
-    Game game{};
-    game.start();
+    auto game = Game::getGame();
+    game->start();
 
     return 0;
 }

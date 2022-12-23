@@ -1,16 +1,17 @@
 #include "character.h"
 
 #include <utility>
+#include <algorithm>
 
 #include "item.h"
 #include "effect.h"
 
-Character::Character(std::string name, char charForm) : name(std::move(name)), charForm(charForm) {
+Character::Character(std::string name, std::string stringForm) : name(std::move(name)), stringForm(std::move(stringForm)) {
 
 }
 
-char Character::getCharForm() const {
-    return charForm;
+std::string Character::getStringForm() const {
+    return stringForm;
 }
 
 std::shared_ptr<Cell> Character::getCell() const {
@@ -49,10 +50,13 @@ void Character::addItem(std::unique_ptr<Item> item) {
 }
 
 void Character::equipItem(std::list<std::unique_ptr<Item>>::iterator item) {
+    if (item == inventory.end()) {
+        return;
+    }
     auto type = (*item)->getType();
-    unequipItem(type);
+    unEquipItem(type);
     switch (type) {
-        case itemType::Weapon:
+        case ItemType::Weapon:
             equipment.weapon.reset(static_cast<Weapon*>((*item).release()));
             inventory.erase(item);
             break;
@@ -61,9 +65,9 @@ void Character::equipItem(std::list<std::unique_ptr<Item>>::iterator item) {
     }
 }
 
-void Character::unequipItem(itemType type) {
+void Character::unEquipItem(ItemType type) {
     switch (type) {
-        case itemType::Weapon:
+        case ItemType::Weapon:
             if (equipment.weapon) {
                 inventory.push_back(std::move(equipment.weapon));
             }
@@ -73,7 +77,7 @@ void Character::unequipItem(itemType type) {
     }
 }
 
-void Character::addEffect(std::unique_ptr<Effect> effect) {
+void Character::addEffect(std::unique_ptr<Effect>&& effect) {
     effect->setOwner(shared_from_this());
     effects.push_back(std::move(effect));
 }
@@ -85,4 +89,8 @@ void Character::processEffects() {
             effects.erase(it);
         }
     }
+}
+
+const Character::Equipment &Character::getEquipment() const{
+    return equipment;
 }

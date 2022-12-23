@@ -5,23 +5,23 @@
 using enum terrainType;
 
 struct fields {
-    char charForm;
+    std::string stringForm;
     bool isWalkable;
 };
 // A map to easily get chars
 static std::map<terrainType, fields> typeTable = {
-        {Wall, {'#', false}},
-        {Ground, {'.', true}}
+        {Wall, {"#", false}},
+        {Ground, {".", true}}
 };
 
 Terrain::Terrain(terrainType type) : type(type) {
     auto tmp = typeTable[type];
-    charForm = tmp.charForm;
+    stringForm = tmp.stringForm;
     isWalkable = tmp.isWalkable;
 }
 
-char Terrain::getCharForm() const {
-    return charForm;
+std::string Terrain::getStringForm() const {
+    return stringForm;
 }
 
 Terrain::~Terrain() = default;

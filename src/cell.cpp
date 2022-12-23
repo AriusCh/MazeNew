@@ -15,12 +15,12 @@ Cell::Cell(terrainType TerrainType, Coords_t coords) : terrain(std::make_unique<
 
 }
 
-char Cell::getCharForm() {
+std::string Cell::getStringForm() {
     if (character) {
-        return character->getCharForm();
+        return character->getStringForm();
     }
 
-    return terrain->getCharForm();
+    return terrain->getStringForm();
 }
 
 void Cell::setCharacter(std::shared_ptr<Character> newChar) {

@@ -6,43 +6,55 @@
 #include "cell.h"
 #include "curses.h"
 
+std::shared_ptr<Game> Game::game = nullptr;
 Game::Game() = default;
 
-bool endSession = false;
+std::shared_ptr<Game> Game::getGame() {
+    if (!game) {
+        struct gameMakeSharedEnabler : public Game {};
+        game = std::make_shared<gameMakeSharedEnabler>();
+    }
+    return game;
+}
+
+std::shared_ptr<Dungeon> Game::getDungeon() {
+    return dungeon;
+}
+
 
 void Game::start() {
     dungeon = std::make_shared<Dungeon>();
     auto term = Terminal::getTerminal();
-    while (!endSession) {
-        term->print(dungeon);
-        processGameplayInput();
+    while (!bEndSession) {
+        term->printContent();
+        term->processInput();
     }
 }
 
-void Game::processGameplayInput() {
-    auto key = getch();
-    switch (key) {
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-            movePlayer(key);
-            break;
-        case 'a':
-            attackMelee();
-            break;
-        case 'i':
-            openInventory();
-            break;
-        case 'q':
-            endSession = true;
-            break;
-    }
-}
+//void Game::processGameplayInput() {
+//    auto key = getch();
+//    switch (key) {
+//        case '1':
+//        case '2':
+//        case '3':
+//        case '4':
+//        case '6':
+//        case '7':
+//        case '8':
+//        case '9':
+//            movePlayer(key);
+//            break;
+//        case 'a':
+//            attackMelee();
+//            break;
+//        case 'i':
+//            openInventory();
+//            break;
+//        case 'q':
+//            endSession = true;
+//            break;
+//    }
+//}
 
 void Game::movePlayer(int key) {
     auto player = Player::getPlayer();
@@ -78,8 +90,8 @@ void Game::movePlayer(int key) {
     }
 }
 
-void Game::attackMelee() {
-    auto direction = getch();
+void Game::attackMelee(int direction) {
+//    auto direction = getch();
     auto player = Player::getPlayer();
     auto playerCell = player->getCell();
     if (!playerCell)
@@ -94,6 +106,7 @@ void Game::attackMelee() {
             break;
         case '3':
             dungeon->tryToAttackMelee(Player::getPlayer(), {coords.y + 1, coords.x + 1});
+            break;
         case '4':
             dungeon->tryToAttackMelee(Player::getPlayer(), {coords.y, coords.x - 1});
             break;
@@ -112,28 +125,39 @@ void Game::attackMelee() {
     }
 }
 
-void Game::openInventory() {
-    auto term = Terminal::getTerminal();
-    term->openInventory();
-    while (true) {
-        auto key = getch();
-        switch (key) {
-            case KEY_UP:
-                term->moveInvCursUp();
-                break;
-            case KEY_DOWN:
-                term->moveInvCursDown();
-                break;
-            case KEY_LEFT:
-                term->moveInvPageDown();
-                break;
-            case KEY_RIGHT:
-                term->moveInvPageUp();
-                break;
-            case 'i':
-            case 27:
-                term->closeInventory();
-                return;
-        }
-    }
+void Game::setEndSession(bool newValue) {
+    bEndSession = newValue;
 }
+
+//void Game::openInventory() {
+//    auto term = Terminal::getTerminal();
+//    term->openInventory();
+//    term->openEquipment();
+//    while (true) {
+//        auto key = getch();
+//        switch (key) {
+//            case KEY_UP:
+//                term->moveInvCursUp();
+//                break;
+//            case KEY_DOWN:
+//                term->moveInvCursDown();
+//                break;
+//            case KEY_LEFT:
+//                term->moveInvPageDown();
+//                break;
+//            case KEY_RIGHT:
+//                term->moveInvPageUp();
+//                break;
+//            case 'e':
+//                Player::getPlayer()->equipItem(term->getInvItemUnderCurs());
+//                term->refreshInventory();
+//                term->refreshEquipment();
+//                break;
+//            case 'i':
+//            case 27:
+//                term->closeInventory();
+//                term->closeEquipment();
+//                return;
+//        }
+//    }
+//}

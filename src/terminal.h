@@ -1,76 +1,89 @@
 #pragma once
 
 #include "curses.h"
+
 #include <memory>
 #include <string>
+#include <list>
 
 class Dungeon;
+
 class Cell;
+
+class Item;
+
+enum class ItemType;
 
 class Terminal {
 public:
     Terminal(Terminal &other) = delete;
+
     void operator=(const Terminal &other) = delete;
+
     ~Terminal();
+
     static std::shared_ptr<Terminal> getTerminal();
 
-    void print(const std::shared_ptr<Dungeon> &dungeon);
-    void print(const std::shared_ptr<Cell> &cell);
+    void printContent();
 
-    void openInventory();
-    void closeInventory();
+    void processInput();
 
     void refreshScreen();
 
-    void moveInvCursUp();
-    void moveInvCursDown();
-    void moveInvPageUp();
-    void moveInvPageDown();
+//    void openInventory();
+//    void refreshInventory();
+//    void closeInventory();
+//    void moveInvCursUp();
+//    void moveInvCursDown();
+//    void moveInvPageUp();
+//    void moveInvPageDown();
+//    std::list<std::unique_ptr<Item>>::iterator getInvItemUnderCurs();
+
+//    void openEquipment();
+//    void closeEquipment();
+//    void refreshEquipment();
 
     std::string statusLineText = "ABOBABABBABABABBABBABBYAEBALNCURSESQHWIUOEQRIUQHEWUIOEHWQIUEBLYAT";
 
 private:
     Terminal();
+
     static void initialize();
+
     static void end();
+
     static std::shared_ptr<Terminal> term;
+
     static void init_colors();
 
-    void updateStatusLine();
+    void updateStatusLine(std::string text);
+
     void updateWindowSizes();
 
-    class WIN {
-    public:
-        void moveCurs(int Y, int X) const;
-        void print(const std::string& str) const;
-        void mvprint(int Y, int X, const std::string &str) const;
-        void clear() const;
+    class Window;
 
-        int sizeY;
-        int sizeX;
-        int startY;
-        int startX;
-    };
+    class WinInventory;
 
-    int invSizeY = 30;
-    int invSizeX = 30;
+    class WinMain;
 
-    std::unique_ptr<WIN> createWindow(int sizeY, int sizeX, int startY, int startX) const;
-    void refreshInventory();
+    class WinEquipment;
 
-    std::unique_ptr<WIN> winMain = nullptr;
-    std::unique_ptr<WIN> winInventory = nullptr;
-    std::unique_ptr<WIN> winStatusLine = nullptr;
+    class WinStatusLine;
 
-    int invCursPos = 0;
-    int invCurrentPage = 0;
-    int invMaxPage;
-    int invMaxPageSize;
-    const int invTopIndent = 1;
-    const int invBottomIndent = 2;
-    const int invLeftIndent = 1;
-    const int invRightIndent = 1;
+    enum class WinType;
 
-    int prevLines = 0;
-    int prevCols = 0;
+    std::unique_ptr<Window> createWindow(WinType type);
+
+    std::shared_ptr<Window> winActive;
+    std::shared_ptr<Window> winMain;
+    std::shared_ptr<Window> winInventory;
+    std::shared_ptr<Window> winEquipment;
+    std::shared_ptr<Window> winStatusLine;
+
+    void setWinActive(std::shared_ptr<Window> newWinActive);
+
+    void changeActiveWindow();
+
+    static int prevLines;
+    static int prevCols;
 };

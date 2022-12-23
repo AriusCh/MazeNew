@@ -31,9 +31,8 @@ void Dungeon::generateEmptyLevel() {
     level[height / 2][width / 2]->setCharacter(Player::getPlayer());
     addCharacter(Player::getPlayer());
     Player::getPlayer()->addItem(std::make_unique<Weapon>("Dagger", 6));
-    Player::getPlayer()->equipItem(Player::getPlayer()->getInventory().begin());
 
-    auto frog = std::make_shared<Character>("Frog", 'f');
+    auto frog = std::make_shared<Character>("Frog", "f");
     level[1][1]->setCharacter(frog);
     addCharacter(frog);
 }

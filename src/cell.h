@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 class Terrain;
 class Object;
@@ -22,7 +23,7 @@ public:
 
     ~Cell();
 
-    char getCharForm();
+    std::string getStringForm();
 
     std::shared_ptr<Character> getCharacter() const;
 

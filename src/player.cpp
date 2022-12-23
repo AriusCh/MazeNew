@@ -5,7 +5,7 @@
 
 std::shared_ptr<Player> Player::player = nullptr;
 
-Player::Player() : Character("Unnamed", '@') {
+Player::Player() : Character("Unnamed", "@") {
 }
 
 std::shared_ptr<Player> Player::getPlayer() {

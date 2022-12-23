@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 enum class terrainType {
     Ground,
     Wall
@@ -10,11 +12,11 @@ public:
     Terrain(terrainType type);
     ~Terrain();
 
-    char getCharForm() const;
+    std::string getStringForm() const;
     bool getIsWalkable() const;
 
 private:
     terrainType type;
-    char charForm;
+    std::string stringForm;
     bool isWalkable;
 };
